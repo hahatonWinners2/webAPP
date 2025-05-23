@@ -7,7 +7,7 @@ from fastapi import FastAPI
 
 from config import logger
 # from src.api.grpc.services import ProxyService
-# from src.storage import database
+from src.storage import postgres
 from src.api import router as api_router
 
 logger = logger(__name__)
@@ -15,11 +15,11 @@ logger = logger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    # await database.connect()
+    await postgres.connect()
     # grpc_task = asyncio.create_task(ProxyService.serve())
     yield
     # grpc_task.cancel()
-    # await database.disconnect()
+    await postgres.disconnect()
 
 
 def create_app() -> FastAPI:
