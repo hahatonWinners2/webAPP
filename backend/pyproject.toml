@@ -1,0 +1,24 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "TiRe",email = "zientenin@mail.ru"}
+]
+readme = "README.md"
+requires-python = ">3.12,<4.0"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "pydantic-settings (>=2.9.1,<3.0.0)",
+    "uvicorn (>=0.34.2,<0.35.0)",
+    "beautifulsoup4 (>=4.13.4,<5.0.0)",
+    "orjson (>=3.10.18,<4.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
