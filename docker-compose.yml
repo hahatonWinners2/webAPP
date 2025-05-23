@@ -1,16 +1,38 @@
 services:
+  database:
+    image: postgres:17.4-alpine3.21
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:5440:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    networks:
+      - api-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "test", "-U", "test" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
   backend:
     build: ./backend
-    command: sh -c "python3 -m src"
+    command: sh -c "poetry run yoyo apply -b && poetry run python -m src"
     ports:
       - "8000:8001"
     stop_signal: SIGINT
     restart: unless-stopped
     volumes:
       - ./backend:/usr/src/hackaton/backend
-    # depends_on:
-    #   rabbitmq:
-    #     condition: service_healthy
+    depends_on:
+      database:
+        condition: service_healthy
+      # rabbitmq:
+      #   condition: service_healthy
     networks:
       - api-network
 
@@ -18,3 +40,7 @@ services:
 networks:
   api-network:
     driver: bridge
+
+
+volumes:
+  database-data:
