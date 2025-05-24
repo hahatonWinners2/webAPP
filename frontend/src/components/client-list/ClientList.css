@@ -71,7 +71,7 @@
 
 .search-input {
   flex: 1;
-  max-width: 100%;
+  max-width: 300px;
   border-radius: 15px;
   border: 2px solid var(--border-color);
   padding: 1rem 1.5rem;
@@ -124,6 +124,8 @@ th {
   top: 0;
   z-index: 1;
   border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  padding-left: 1.5rem;
 }
 
 th.sortable {
@@ -202,18 +204,27 @@ tr:active {
 }
 
 .client-checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid var(--primary-color);
-  accent-color: var(--primary-color);
+  background-color: #19b14a;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 16px;
   cursor: pointer;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
   transition: all 0.2s ease;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  text-align: center;
+  min-width: 160px;
 }
 
 .client-checkbox:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 0 2px rgba(17, 165, 56, 0.2);
+  background-color: #158c3b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(25, 177, 74, 0.2);
 }
 
 .client-checkbox:checked {
@@ -267,6 +278,26 @@ tr:active {
 .client-table td {
   border-radius: 20px !important;
 }
+.request-check-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+.request-check-btn:hover {
+  background-color: #45a049;
+}
+
+/* Если хотите выделить кнопку — например, для избранного */
+.client-checkbox.favorited {
+  background-color: #ffeb3b;
+  border-color: #ffc107;
+}
 
 .client-list-page, .client-list-header, .header-title, .btn, .btn-icon, .btn-details, .client-checkbox, .client-table th, .client-table td {
   font-family: 'Raleway', sans-serif !important;
@@ -312,4 +343,13 @@ tr:active {
     font-size: 0.9rem;
     border-radius: 20px;
   }
+}
+
+td:last-child {
+  text-align: right;
+  padding-right: 2rem;
+}
+
+td:first-child {
+  padding-left: 1.5rem;
 } 

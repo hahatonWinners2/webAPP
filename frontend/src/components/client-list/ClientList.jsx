@@ -130,11 +130,12 @@ const ClientList = ({ onAddClick }) => {
                   <td>{client.buildingType}</td>
                   <td><SuspicionIndicator value={client.suspicion} /></td>
                   <td>
-                    <input 
-                      type="checkbox" 
+                    <button 
+                      type="button" 
                       className="client-checkbox"
-                      onClick={e => e.stopPropagation()} 
-                    />
+                      onClick={e => e.stopPropagation()}>
+                      Запросить проверку
+                    </button>
                   </td>
                 </tr>
               ))}

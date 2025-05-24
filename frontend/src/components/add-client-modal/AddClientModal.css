@@ -24,8 +24,34 @@
 
 .modal-content h2 {
   margin-bottom: 1rem;
-  font-size: 1rem;
+  font-size: 1.3rem;
   color: var(--text-color);
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  font-family: 'Raleway', sans-serif;
+}
+
+.modal-content label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.modal-content .form-group {
+  margin-bottom: 0.75rem;
+  text-align: left;
 }
 
 .modal-actions {

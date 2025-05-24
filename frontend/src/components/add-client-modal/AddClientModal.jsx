@@ -54,7 +54,6 @@ const AddClientModal = ({ onClose }) => {
                   value={formData.name}
                   onChange={handleInputChange}
                   maxLength={500}
-                  placeholder="Имя клиента"
                   required
               />
             </div>
@@ -81,7 +80,6 @@ const AddClientModal = ({ onClose }) => {
                   onChange={handleInputChange}
                   maxLength={500}
                   rows="3"
-                  placeholder="Описание клиента"
               />
             </div>
 
