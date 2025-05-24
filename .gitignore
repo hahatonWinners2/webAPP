@@ -7,7 +7,15 @@
 /build
 *venv*
 *cache*
-node_modules/
+
+**/node_modules/
+/.pnp
+.pnp.js
+/coverage/
+/build/
+frontend/dist/
+frontend/tsconfig.node.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
