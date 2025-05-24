@@ -4,11 +4,12 @@ import './AddClientModal.css'
 
 const AddClientModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
+    name: '',
     address: '',
-    legalEntity: '',
-    status: 'active',
-    coefficient: 0,
-    comments: '',
+    description: '',
+    buildingType: 'Прочий',
+    roomsCount: 1,
+    residentsCount: 1,
     photo: null
   })
   const [loading, setLoading] = useState(false)
@@ -48,108 +49,116 @@ const AddClientModal = ({ onClose }) => {
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <h2>Добавить клиента</h2>
-        {error && <div className="error">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="address">Адрес</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <h2>Добавить клиента</h2>
+          {error && <div className="error">{error}</div>}
 
-          <div className="form-group">
-            <label htmlFor="legalEntity">Юридическое лицо</label>
-            <input
-              type="text"
-              id="legalEntity"
-              name="legalEntity"
-              value={formData.legalEntity}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name">Имя клиента</label>
+              <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  maxLength={500}
+                  placeholder="Имя клиента"
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="status">Статус</label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="active">Активный</option>
-              <option value="inactive">Неактивный</option>
-              <option value="pending">В ожидании</option>
-            </select>
-          </div>
+            <div className="form-group">
+              <label htmlFor="address">Адрес</label>
+              <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  maxLength={500}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="coefficient">Коэффициент подозрительности</label>
-            <input
-              type="number"
-              id="coefficient"
-              name="coefficient"
-              value={formData.coefficient}
-              onChange={handleInputChange}
-              step="0.1"
-              min="0"
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="description">Описание</label>
+              <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  maxLength={500}
+                  rows="3"
+                  placeholder="Описание клиента"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="comments">Комментарии</label>
-            <textarea
-              id="comments"
-              name="comments"
-              value={formData.comments}
-              onChange={handleInputChange}
-              rows="4"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="buildingType">Тип здания</label>
+              <select
+                  id="buildingType"
+                  name="buildingType"
+                  value={formData.buildingType}
+                  onChange={handleInputChange}
+                  required
+              >
+                <option value="Прочий">Прочий</option>
+                <option value="Жилой">Жилой</option>
+                <option value="Коммерческий">Коммерческий</option>
+                {/* Добавьте другие типы по необходимости */}
+              </select>
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="photo">Фото</label>
-            <input
-              type="file"
-              id="photo"
-              name="photo"
-              onChange={handleInputChange}
-              accept="image/*"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="roomsCount">Количество комнат</label>
+              <input
+                  type="number"
+                  id="roomsCount"
+                  name="roomsCount"
+                  value={formData.roomsCount}
+                  onChange={handleInputChange}
+                  min={0}
+                  required
+              />
+            </div>
 
-          <div className="modal-actions">
-            <button
-              type="button"
-              className="btn"
-              onClick={onClose}
-              disabled={loading}
-            >
-              Отмена
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Создание...' : 'Создать'}
-            </button>
-          </div>
-        </form>
+            <div className="form-group">
+              <label htmlFor="residentsCount">Количество жильцов</label>
+              <input
+                  type="number"
+                  id="residentsCount"
+                  name="residentsCount"
+                  value={formData.residentsCount}
+                  onChange={handleInputChange}
+                  min={0}
+                  required
+              />
+            </div>
+
+
+            <div className="modal-actions">
+              <button
+                  type="button"
+                  className="btn"
+                  onClick={onClose}
+                  disabled={loading}
+              >
+                Отмена
+              </button>
+              <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+              >
+                {loading ? 'Создание...' : 'Создать'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
   )
 }
 
-export default AddClientModal 
+export default AddClientModal
