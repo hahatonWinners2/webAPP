@@ -45,6 +45,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./frontend:/usr/src/hackaton/frontend
+      - /usr/src/hackaton/frontend/node_modules
     depends_on:
       backend:
         condition: service_started
