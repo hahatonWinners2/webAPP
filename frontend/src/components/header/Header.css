@@ -7,13 +7,13 @@ header {
     padding: 15px 10px 15px 10px;
     margin: 10px auto 0 auto;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     font-family: 'Raleway', sans-serif;
     letter-spacing: 0.01em;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
     justify-content: left;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }

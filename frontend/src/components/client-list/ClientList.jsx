@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { mockClients } from '/src/mockData'
 import './ClientList.css'
 import { FaPlus, FaSync } from 'react-icons/fa'
+import UploadPage from "../../pages/upload_page.jsx";
 
 const ClientList = ({ onAddClick }) => {
   const navigate = useNavigate()
@@ -12,6 +13,8 @@ const ClientList = ({ onAddClick }) => {
   const [filter, setFilter] = useState('')
   const [sortField, setSortField] = useState('address')
   const [sortDirection, setSortDirection] = useState('asc')
+  const [showUPloader, setUPloader] = useState(false);
+
 
   useEffect(() => {
     // Имитация загрузки данных
@@ -89,7 +92,14 @@ const ClientList = ({ onAddClick }) => {
             <button className="btn-icon" onClick={onAddClick} title="Добавить клиента">
               <FaPlus />
             </button>
+            <button className="btn-icon" onClick={() => setUPloader(true)} title="Загрузить таблицу">
+              <FaPlus />
+            </button>
           </div>
+          {showUPloader && (
+              <UploadPage onClose={() => setUPloader(false)} />
+          )}
+
         </div>
 
         <div className="client-list">
