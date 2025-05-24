@@ -1,16 +1,10 @@
-FROM python:3.13-slim
+FROM python:3.11
 
-RUN mkdir -p /usr/src/hackaton/backend
-WORKDIR /usr/src/hackaton/backend
+WORKDIR /code
 
-RUN pip install --upgrade pip
-RUN pip3 install --upgrade poetry==2.1.2
+COPY . .
 
-COPY ./poetry.lock /usr/src/hackaton/backend/poetry.lock
-COPY ./pyproject.toml /usr/src/hackaton/backend/pyproject.toml
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-RUN python3 -m poetry config virtualenvs.create false \
-    && python3 -m poetry install --no-interaction --no-ansi \
-    && echo yes | python3 -m poetry cache clear . --all
 
-COPY . /usr/src/hackaton/backend
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

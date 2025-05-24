@@ -1,0 +1,14 @@
+fastapi
+python-multipart
+uvicorn
+
+python-dotenv
+
+alembic
+asyncpg
+
+catboost
+pandas
+reportlab
+
+pydantic-settings

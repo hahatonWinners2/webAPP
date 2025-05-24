@@ -21,18 +21,27 @@ services:
 
   backend:
     build: ./backend
-    command: sh -c "poetry run yoyo apply -b && poetry run python -m src"
     ports:
-      - "8000:8001"
+      - "80:80"
     stop_signal: SIGINT
     restart: unless-stopped
     volumes:
-      - ./backend:/usr/src/hackaton/backend
+      - ./backend:/code
     depends_on:
       database:
         condition: service_healthy
-      # rabbitmq:
-      #   condition: service_healthy
+    networks:
+      - api-network
+
+  alembic:
+    build: ./backend
+    entrypoint: [ "alembic" ]
+    command: [ "upgrade", "head" ]
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
     networks:
       - api-network
 
