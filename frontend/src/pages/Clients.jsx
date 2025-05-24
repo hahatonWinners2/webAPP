@@ -4,7 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 
 import Header from '/src/components/header/Header'
 import ClientList from '/src/components/client-list/ClientList'
-import AddClientModal from '/src/components/AddClientModal'
+import AddClientModal from '/src/components/add-client-modal/AddClientModal'
 
 const ClientsPage = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)

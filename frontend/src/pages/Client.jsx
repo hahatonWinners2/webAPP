@@ -2,8 +2,8 @@ import { useState } from 'react'
 import React from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 
-import Header from '../components/header/Header';
-import ClientDetails from '../components/ClientDetails'
+import Header from '/src/components/header/Header';
+import ClientDetails from '/src/components/client-details/ClientDetails'
 
 const ClientPage = () => {
     const navigate = useNavigate();

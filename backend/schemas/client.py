@@ -36,10 +36,27 @@ class MonthlyConsumptionCreate(BaseModel):
     class Config:
         orm_mode = True
 
+
 class MonthlyConsumptionResponse(BaseModel):
     date: date
     consumption: float
 
     class Config:
         orm_mode = True
+
+class ClientResponse(BaseModel):
+    name: str
+    address: str
+    description: Optional[str]
+    
+    buildingType: Optional[str]
+    roomsCount: Optional[int]
+    residentsCount: Optional[int]
+
+    consumptions: list[MonthlyConsumptionResponse]
+    suspicion: int
+
+    class Config:
+        orm_mode = True
+
 

@@ -4,7 +4,7 @@ from datetime import date
 from sqlalchemy import desc, and_
 from typing import List, Optional
 
-from schemas.client import ClientCreate, MonthlyConsumptionCreate, MonthlyConsumptionResponse, TopClientResponse
+from schemas.client import ClientCreate, MonthlyConsumptionCreate, ClientResponse, TopClientResponse
 from storage.models.client import Client
 from storage.models.consumption import MonthlyConsumption
 from storage.models.suspicious import SuspiciousClient
@@ -108,7 +108,7 @@ async def add_next_month_consumption(
     return new_consumption
 
 
-@router.get("/clients/{client_id}/monthly_consumptions", response_model=list[MonthlyConsumptionResponse])
+@router.get("/clients/{client_id}", response_model=ClientResponse)
 async def get_monthly_consumptions(
     client_id: str
 ):
@@ -126,5 +126,7 @@ async def get_monthly_consumptions(
             .order_by(MonthlyConsumption.date)
         )
         consumptions = result.scalars().all()
+    client = client.__dict__
+    client['consumptions'] = consumptions
 
-    return consumptions
+    return client

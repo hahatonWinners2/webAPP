@@ -10,8 +10,8 @@ import {
   ResponsiveContainer,
   Legend
 } from 'recharts'
-import { mockClients, mockConsumption } from '../mockData'
 import './ClientDetails.css'
+import axios from 'axios'
 
 const ClientDetails = (props) => {
   const { id } = useParams()
@@ -26,13 +26,12 @@ const ClientDetails = (props) => {
   const editedClient = props.editedClient
 
   useEffect(() => {
-    // Имитация загрузки данных
-    setTimeout(() => {
-      const foundClient = mockClients.find(c => c.id === parseInt(id))
+    setTimeout(async () => {
+      const foundClient = (await axios.get('/clients/' + id)).data
       if (foundClient) {
         setClient(foundClient)
         setEditedClient(foundClient)
-        const chartData = mockConsumption[id].consumption.map(([month, value]) => ({
+        const chartData = foundClient.consumptions.map(([month, value]) => ({
           month,
           потребление: value
         }))
@@ -81,22 +80,22 @@ const ClientDetails = (props) => {
                 <span style={{fontWeight: "bold"}}>Статус: </span>
                 {isEditing ? (
                   <select
-                    name="type"
-                    value={editedClient.type}
+                    name="buildingType"
+                    value={editedClient.buildingType}
                     onChange={handleInputChange}
                     className="input"
                   >
-                    <option value="private">Частный</option>
-                    <option value="apartment">Многоквартирный</option>
-                    <option value="country_house">Дача</option>
-                    <option value="other">Прочий</option>
+                    <option value="Частный">Частный</option>
+                    <option value="Многоквартирный">Многоквартирный</option>
+                    <option value="Дача">Дача</option>
+                    <option value="Прочий">Прочий</option>
                   </select>
                 ) : (
-                  <span className="input">{client.type}</span>
+                  <span className="input">{client.buildingType}</span>
                 )}
               </div>
               <div className="form-group">
-                <span style={{fontWeight: "bold"}}>Коэффициент подозрительности:</span> {client.coefficient}%
+                <span style={{fontWeight: "bold"}}>Коэффициент подозрительности:</span> {client.suspicion}%
               </div>
             </div>
 
@@ -104,16 +103,7 @@ const ClientDetails = (props) => {
               <h2>Статус проверки</h2>
               <div className="form-group">
                 <label>Комментарий</label>
-                {isEditing ? (
-                  <textarea
-                    name="comments"
-                    value={editedClient.comments}
-                    onChange={handleInputChange}
-                    rows="4"
-                  />
-                ) : (
-                  <p>{client.comments}</p>
-                )}
+                <p>{client.comments}</p>
               </div>
             </div>
           </div>

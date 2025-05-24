@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { mockClients } from '/src/mockData'
 import './ClientList.css'
 import { FaPlus, FaSync, FaPaperclip } from 'react-icons/fa'
-import UploadPage from "../../pages/upload_page.jsx";
+import UploadPage from "/src/pages/upload_page.jsx";
+import axios from 'axios'
 
 const ClientList = ({ onAddClick }) => {
   const navigate = useNavigate()
@@ -17,9 +17,9 @@ const ClientList = ({ onAddClick }) => {
 
 
   useEffect(() => {
-    // Имитация загрузки данных
-    setTimeout(() => {
-      setClients(mockClients)
+    setTimeout(async () => {
+      const clients = await axios.get('/clients')
+      setClients(clients.data)
       setLoading(false)
     }, 500)
   }, [])
@@ -35,9 +35,9 @@ const ClientList = ({ onAddClick }) => {
 
   const handleRefresh = () => {
     setLoading(true)
-    // Имитация обновления данных
-    setTimeout(() => {
-      setClients(mockClients)
+    setTimeout(async () => {
+      const clients = await axios.get('/clients')
+      setClients(clients.data)
       setLoading(false)
     }, 500)
   }
@@ -45,14 +45,14 @@ const ClientList = ({ onAddClick }) => {
   const filteredAndSortedClients = clients
     .filter(client => 
       client.address.toLowerCase().includes(filter.toLowerCase()) ||
-      client.info.toLowerCase().includes(filter.toLowerCase())
+      client.buildingType.toLowerCase().includes(filter.toLowerCase())
     )
     .sort((a, b) => {
       const aValue = a[sortField]
       const bValue = b[sortField]
       const direction = sortDirection === 'asc' ? 1 : -1
       
-      if (sortField === 'coefficient') {
+      if (sortField === 'suspicion') {
         return (aValue - bValue) * direction
       }
       
@@ -80,7 +80,7 @@ const ClientList = ({ onAddClick }) => {
         <div className="client-list-filters">
           <input
             type="text"
-            placeholder="Поиск по адресу или информации..."
+            placeholder="Поиск по адресу или типу строения..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="search-input"
@@ -109,11 +109,11 @@ const ClientList = ({ onAddClick }) => {
                 <th onClick={() => handleSort('address')} className="sortable">
                   Адрес {sortField === 'address' && (sortDirection === 'asc' ? '↑' : '↓')}
                 </th>
-                <th onClick={() => handleSort('info')} className="sortable">
-                  Комментарий {sortField === 'info' && (sortDirection === 'asc' ? '↑' : '↓')}
+                <th onClick={() => handleSort('buildingType')} className="sortable">
+                  Тип строения {sortField === 'buildingType' && (sortDirection === 'asc' ? '↑' : '↓')}
                 </th>
-                <th onClick={() => handleSort('coefficient')} className="sortable">
-                  Процент подозрительности {sortField === 'coefficient' && (sortDirection === 'asc' ? '↑' : '↓')}
+                <th onClick={() => handleSort('suspicion')} className="sortable">
+                  Процент подозрительности {sortField === 'suspicion' && (sortDirection === 'asc' ? '↑' : '↓')}
                 </th>
                 <th></th>
               </tr>
@@ -127,8 +127,8 @@ const ClientList = ({ onAddClick }) => {
                   style={{ cursor: 'pointer' }}
                 >
                   <td>{client.address}</td>
-                  <td>{client.info}</td>
-                  <td><SuspicionIndicator value={client.coefficient} /></td>
+                  <td>{client.buildingType}</td>
+                  <td><SuspicionIndicator value={client.suspicion} /></td>
                   <td>
                     <input 
                       type="checkbox" 

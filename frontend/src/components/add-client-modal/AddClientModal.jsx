@@ -10,7 +10,6 @@ const AddClientModal = ({ onClose }) => {
     buildingType: 'Прочий',
     roomsCount: 1,
     residentsCount: 1,
-    photo: null
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -29,16 +28,7 @@ const AddClientModal = ({ onClose }) => {
     setError(null)
 
     try {
-      const formDataToSend = new FormData()
-      Object.keys(formData).forEach(key => {
-        formDataToSend.append(key, formData[key])
-      })
-
-      await axios.post('/api/clients', formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      await axios.post('/clients', formData)
       onClose()
     } catch (err) {
       setError('Ошибка при создании клиента')
