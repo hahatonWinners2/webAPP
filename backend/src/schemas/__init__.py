@@ -1,4 +1,4 @@
-from src.schemas.address import AddressSchema, CreateAddressSchema
+from src.schemas.account import AccountSchema, CreateAccountSchema
 from src.schemas.suspect import (
     SuspectSchema,
     CreateSuspectSchema,
@@ -6,8 +6,8 @@ from src.schemas.suspect import (
 )
 
 __all__ = [
-    'AddressSchema',
-    'CreateAddressSchema',
+    'AccountSchema',
+    'CreateAccountSchema',
     'SuspectSchema',
     'CreateSuspectSchema',
     'UpdateSuspectSchema',

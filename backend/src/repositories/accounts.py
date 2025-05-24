@@ -1,20 +1,20 @@
 from asyncpg.connection import Connection
 
 from src.repositories.base import BaseRepository
-from src.schemas import AddressSchema, CreateAddressSchema
+from src.schemas import AccountSchema, CreateAccountSchema
 from src.specifications import Specification
 
 
-class AddressesRepository(BaseRepository):
+class AccountsRepository(BaseRepository):
     @staticmethod
     async def create(
         connection: Connection,
-        create_data: CreateAddressSchema,
-    ) -> AddressSchema:
+        create_data: CreateAccountSchema,
+    ) -> AccountSchema:
         return await super(__class__, __class__).create(
             connection,
-            'hackaton.addresses',
-            AddressSchema,
+            'hackaton.accounts',
+            AccountSchema,
             create_data,
         )
 
@@ -24,11 +24,11 @@ class AddressesRepository(BaseRepository):
         *specifications: Specification,
         page: int = 1,
         page_size: int = 100,
-    ) -> list[AddressSchema]:
+    ) -> list[AccountSchema]:
         return await super(__class__, __class__).get(
             connection,
-            'dating.accounts',
-            AddressSchema,
+            'hackaton.accounts',
+            AccountSchema,
             *specifications,
             page=page,
             page_size=page_size,

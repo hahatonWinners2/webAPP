@@ -1,4 +1,4 @@
-from src.repositories.addresses import AddressesRepository
+from src.repositories.accounts import AccountsRepository
 from src.repositories.suspects import SuspectsRepository
 
 
