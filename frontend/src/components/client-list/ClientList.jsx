@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { mockClients } from '/src/mockData'
 import './ClientList.css'
-import { FaPlus, FaSync } from 'react-icons/fa'
+import { FaPlus, FaSync, FaPaperclip } from 'react-icons/fa'
 import UploadPage from "../../pages/upload_page.jsx";
 
 const ClientList = ({ onAddClick }) => {
@@ -93,7 +93,7 @@ const ClientList = ({ onAddClick }) => {
               <FaPlus />
             </button>
             <button className="btn-icon" onClick={() => setUPloader(true)} title="Загрузить таблицу">
-              <FaPlus />
+              <FaPaperclip />
             </button>
           </div>
           {showUPloader && (
