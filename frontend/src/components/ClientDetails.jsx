@@ -65,7 +65,7 @@ const ClientDetails = (props) => {
             <div className="info-section">
               <h2>Основная информация</h2>
               <div className="form-group">
-                <label>Адрес</label>
+                <span style={{fontWeight: "bold"}}>Адрес: </span>
                 {isEditing ? (
                   <input
                     type="text"
@@ -74,58 +74,36 @@ const ClientDetails = (props) => {
                     onChange={handleInputChange}
                   />
                 ) : (
-                  <p>{client.address}</p>
+                  <span className="input">{client.address}</span>
                 )}
               </div>
               <div className="form-group">
-                <label>Юридическое лицо</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="legalEntity"
-                    value={editedClient.legalEntity}
-                    onChange={handleInputChange}
-                  />
-                ) : (
-                  <p>{client.legalEntity}</p>
-                )}
-              </div>
-              <div className="form-group">
-                <label>Статус</label>
+                <span style={{fontWeight: "bold"}}>Статус: </span>
                 {isEditing ? (
                   <select
-                    name="status"
-                    value={editedClient.status}
+                    name="type"
+                    value={editedClient.type}
                     onChange={handleInputChange}
+                    className="input"
                   >
-                    <option value="active">Активный</option>
-                    <option value="inactive">Неактивный</option>
-                    <option value="pending">В ожидании</option>
+                    <option value="private">Частный</option>
+                    <option value="apartment">Многоквартирный</option>
+                    <option value="country_house">Дача</option>
+                    <option value="other">Прочий</option>
                   </select>
                 ) : (
-                  <p>{client.status}</p>
+                  <span className="input">{client.type}</span>
                 )}
               </div>
               <div className="form-group">
-                <label>Коэффициент подозрительности</label>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    name="coefficient"
-                    value={editedClient.coefficient}
-                    onChange={handleInputChange}
-                    step="0.1"
-                  />
-                ) : (
-                  <p>{client.coefficient}%</p>
-                )}
+                <span style={{fontWeight: "bold"}}>Коэффициент подозрительности:</span> {client.coefficient}%
               </div>
             </div>
 
             <div className="info-section">
-              <h2>Дополнительная информация</h2>
+              <h2>Статус проверки</h2>
               <div className="form-group">
-                <label>Комментарии</label>
+                <label>Комментарий</label>
                 {isEditing ? (
                   <textarea
                     name="comments"
@@ -137,12 +115,6 @@ const ClientDetails = (props) => {
                   <p>{client.comments}</p>
                 )}
               </div>
-              {client.photo && (
-                <div className="photo-section">
-                  <h3>Фото</h3>
-                  <img src={client.photo} alt="Фото клиента" className="client-photo" />
-                </div>
-              )}
             </div>
           </div>
 

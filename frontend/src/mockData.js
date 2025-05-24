@@ -6,7 +6,7 @@ export const mockClients = [
     coefficient: 0.8,
     highlighted: false,
     legalEntity: 'ООО "Жилстрой"',
-    status: 'active',
+    type: 'private',
     comments: 'Регулярные платежи',
     photo: 'https://picsum.photos/400/300'
   },
@@ -17,7 +17,7 @@ export const mockClients = [
     coefficient: 90,
     highlighted: true,
     legalEntity: 'ИП Иванов',
-    status: 'pending',
+    type: 'apartment',
     comments: 'Требуется проверка',
     photo: 'https://picsum.photos/400/300'
   },
@@ -28,7 +28,7 @@ export const mockClients = [
     coefficient: 0.5,
     highlighted: false,
     legalEntity: 'ООО "Торгсервис"',
-    status: 'active',
+    type: 'private',
     comments: 'Стабильный клиент',
     photo: 'https://picsum.photos/400/300'
   }

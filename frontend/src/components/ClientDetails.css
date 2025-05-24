@@ -115,12 +115,16 @@
   min-height: 100px;
 }
 
-.form-group p {
+.form-group span.input,
+.form-group input {
   padding: 0.5rem 1rem;
   background: #f8fafc;
   border-radius: 0.75rem;
   margin: 0;
   color: var(--text-color);
+  display: inline;
+  width: 50%;
+  position: relative;
 }
 
 .photo-section {
