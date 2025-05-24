@@ -36,6 +36,21 @@ services:
     networks:
       - api-network
 
+  frontend:
+    build: ./frontend
+    command: sh -c "npm run dev -- --host 0.0.0.0"
+    ports:
+      - "3000:5173"
+    stop_signal: SIGINT
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/usr/src/hackaton/frontend
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - api-network
+
 
 networks:
   api-network:

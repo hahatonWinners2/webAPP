@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap');
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+:root {
+  --primary-color: #11A538;
+  --secondary-color: #0d8a2d;
+  --background-color: #f5f5f5;
+  --table-bg: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --accent-red: #ff4d4d;
+  --accent-orange: #ffa64d;
+  --accent-green: #11A538;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 15px 15px 0 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+/* Button styles */
+.btn {
+  border-radius: 2rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(33, 160, 56, 0.08);
+}
+
+.btn-primary:hover {
+  background: var(--secondary-color);
+  box-shadow: 0 4px 16px rgba(33, 160, 56, 0.12);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+}
+
+/* Card styles */
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    margin: 1rem;
+  }
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+.btn, .btn-icon, .btn-details, .client-checkbox, .client-table th, .client-table td, .header-title {
+  font-family: 'Raleway', sans-serif !important;
+}
+
+/* Для иконок react-icons увеличим толщину через svg */
+.btn-icon svg {
+  stroke-width: 2px;
+}
