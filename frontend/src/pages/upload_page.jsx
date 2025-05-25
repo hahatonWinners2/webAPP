@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import '/src/components/add-client-modal/AddClientModal.css'
+import axios from 'axios'
 
 const UploadPage = ({ onClose, onUploadSuccess }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -25,10 +27,7 @@ const UploadPage = ({ onClose, onUploadSuccess }) => {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
-            const response = await fetch('http://0.0.0.0:80/api/upload-json/', {
-                method: 'POST',
-                body: formData,
-            });
+            const response = await axios.post('/api/upload-json/', formData);
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -61,20 +60,19 @@ const UploadPage = ({ onClose, onUploadSuccess }) => {
                     style={inputStyle}
                 />
 
-                <div style={buttonContainerStyle}>
-                    <button
-                        onClick={handleUpload}
-                        style={uploadButtonStyle}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Загрузка...' : 'Загрузить'}
-                    </button>
-
+                <div style={buttonContainerStyle} className="modal-actions">
                     <button
                         onClick={onClose}
-                        style={cancelButtonStyle}
+                        className="btn"
                     >
                         Отмена
+                    </button>
+                    <button
+                        onClick={handleUpload}
+                        disabled={isLoading}
+                        className="btn btn-primary"
+                    >
+                        {isLoading ? 'Загрузка...' : 'Загрузить'}
                     </button>
                 </div>
             </div>
@@ -120,25 +118,6 @@ const buttonContainerStyle = {
     display: 'flex',
     gap: '1rem',
     marginTop: '1.5rem'
-};
-
-const uploadButtonStyle = {
-    backgroundColor: '#19b14a',
-    color: 'white',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    flex: 1
-};
-
-const cancelButtonStyle = {
-    backgroundColor: '#eee',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    flex: 1
 };
 
 export default UploadPage;

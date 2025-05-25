@@ -62,7 +62,10 @@
 }
 
 .modal-actions .btn {
-  min-width: 100px;
+  width: 100%;
+  border: none;
+  height: auto;
+  padding: 10px 15px;
 }
 
 .error {

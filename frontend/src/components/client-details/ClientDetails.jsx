@@ -73,7 +73,7 @@ const ClientDetails = (props) => {
       <div className="client-details-page">
         <div className="client-content">
           <div className="client-info">
-            <div className="info-section">
+            <div style={{textAlign: "left"}} className="info-section">
               <h2>Основная информация</h2>
               <div className="form-group">
                 <span style={{fontWeight: "bold"}}>Адрес: </span>
@@ -114,7 +114,7 @@ const ClientDetails = (props) => {
             <div className="info-section">
               <h2>Статус проверки</h2>
               { isChecked == null
-                ? <button onClick={() => handleResearch(client.id)}>Запросить проверку</button>
+                ? <button onClick={() => handleResearch(client.id)} className="btn btn-primary">Запросить проверку</button>
                 : <div className="form-group">
                     <label>Комментарий</label>
                     <p>{isChecked == true ? client.comment : 'Запрошена проверка'}</p>

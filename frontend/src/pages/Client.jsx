@@ -25,29 +25,38 @@ const ClientPage = () => {
 
         setHeader(
             <Header useLogo="false">
-                <div>
+                <div style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px",
+                }}>
                     <button style={{
                         fontSize: "28px",
                         background: "none",
                         border: "none",
-                        display: "inline",
-                        textAlign: "center",
                         color: "white",
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        padding: "0 10px 0 5px"
                     }} onClick={() => navigate('/clients')}>
                         ←
                     </button>
-                    Информация о клиенте
+                    <span>Информация о клиенте</span>
                 </div>
                 {isEditing ? (
-                <>
+                <div style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px",
+                }}>
                     <button className="btn btn-primary" onClick={handleSave}>
                     Сохранить
                     </button>
                     <button className="btn" onClick={handleCancel}>
                     Отмена
                     </button>
-                </>
+                </div>
                 ) : (
                 <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
                     Редактировать
