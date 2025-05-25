@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, HTTPException
+from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
 import json
 import tempfile
@@ -32,7 +32,7 @@ router = APIRouter()
 
 
 @router.post("/upload-json/")
-async def upload_json(file: UploadFile):
+async def upload_json(file: UploadFile, background_tasks: BackgroundTasks):
     if file.content_type != "application/json":
         raise HTTPException(status_code=400, detail="Invalid file type. JSON required.")
     content = await file.read()
@@ -47,7 +47,8 @@ async def upload_json(file: UploadFile):
 
     for i, d in enumerate(data):
         info.append({'accountId': d['accountId'], 'isCommercial': answers[i], 'address': d['address']})
-        await create_client(ClientCreate.parse_obj(d))
+        d['suspicion'] = answers[i]
+        background_tasks.add_task(create_client, ClientCreate.parse_obj(d))
 
     return info
 

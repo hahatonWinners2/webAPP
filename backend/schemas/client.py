@@ -12,6 +12,7 @@ class ClientCreate(BaseModel):
     buildingType: Optional[str] = Field('Прочий', max_length=100)
     roomsCount: Optional[int] = Field(1, ge=0)
     residentsCount: Optional[int] = Field(1, ge=0)
+    suspicion: Optional[int]
 
 class TopClientResponse(BaseModel):
     id: UUID
