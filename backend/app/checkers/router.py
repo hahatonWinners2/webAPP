@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from storage.models.suspicious import SuspiciousClient
-from schemas.suspicious import SuspiciousClientCreate, SuspiciousClientRead, SuspiciousClientUpdateComment, SuspiciousClientResponse
+from schemas.suspicious import SuspiciousClientCreate, SuspiciousClientRead, SuspiciousClientUpdateComment, SuspiciousClientResponse, SuspiciousClientUpdateVerdict
 from storage.postgres import async_session  # your async sessionmaker
 
 router = APIRouter()
@@ -50,6 +50,23 @@ async def update_comment_by_client(client_id: str, data: SuspiciousClientUpdateC
 
         for record in records:
             record.comment = data.comment
+
+        await db.commit()
+        return {"updated": len(records)}
+
+@router.patch("/suspicious_clients/{client_id}/verdict")
+async def update_comment_by_client(client_id: str, data: SuspiciousClientUpdateVerdict):
+    async with async_session() as db:
+        result = await db.execute(
+            select(SuspiciousClient).where(SuspiciousClient.client_id == client_id)
+        )
+        records = result.scalars().all()
+        if not records:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No records found for this client")
+
+        for record in records:
+            record.verdict = data.verdict
+            record.checked = True
 
         await db.commit()
         return {"updated": len(records)}

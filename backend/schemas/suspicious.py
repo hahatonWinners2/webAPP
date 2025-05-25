@@ -27,3 +27,6 @@ class SuspiciousClientResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class SuspiciousClientUpdateVerdict(BaseModel):
+    verdict: bool

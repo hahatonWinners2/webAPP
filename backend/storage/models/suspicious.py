@@ -29,5 +29,10 @@ class SuspiciousClient(Base, UUIDMixin):
         String(500),
         comment="Additional comments"
     )
+    verdict = Column(
+        Boolean,
+        nullable=True,
+        comment="Verdict after checking the suspicious client"
+    )
 
     client = relationship("Client", back_populates="suspicious_records")
