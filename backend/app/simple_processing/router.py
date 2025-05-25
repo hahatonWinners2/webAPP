@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse
 import json
 import tempfile
 from pydantic import BaseModel
+from copy import deepcopy
 
 from utils.algorithm.processor import get_answers
 from utils.claim_generation.main import generate_pdf
@@ -41,14 +42,15 @@ async def upload_json(file: UploadFile, background_tasks: BackgroundTasks):
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON file.")
     
-    answers = get_answers(data)
+    answers = get_answers(deepcopy(data))
 
     info = []
 
     for i, d in enumerate(data):
         info.append({'accountId': d['accountId'], 'isCommercial': answers[i], 'address': d['address']})
         d['suspicion'] = answers[i]
-        background_tasks.add_task(create_client, ClientCreate.parse_obj(d))
+        new_cl = ClientCreate.model_validate(d)
+        background_tasks.add_task(create_client, new_cl)
 
     return info
 

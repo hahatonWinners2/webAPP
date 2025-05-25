@@ -4,16 +4,6 @@ from uuid import UUID
 from typing import Optional
 
 
-class ClientCreate(BaseModel):
-    name: str = Field('не знаю, кто я', max_length=100)
-    address: str = Field(..., max_length=255)
-    description: Optional[str] = Field('', max_length=500)
-    
-    buildingType: Optional[str] = Field('Прочий', max_length=100)
-    roomsCount: Optional[int] = Field(1, ge=0)
-    residentsCount: Optional[int] = Field(1, ge=0)
-    suspicion: Optional[int]
-
 class TopClientResponse(BaseModel):
     id: UUID
     address: str
@@ -63,4 +53,16 @@ class ClientResponse(BaseModel):
     class Config:
         orm_mode = True
 
+
+class ClientCreate(BaseModel):
+    name: str = Field('не знаю, кто я', max_length=100)
+    address: str = Field(..., max_length=255)
+    description: Optional[str] = Field('', max_length=500)
+    
+    buildingType: Optional[str] = Field('Прочий', max_length=100)
+    roomsCount: Optional[int] = Field(1, ge=0)
+    residentsCount: Optional[int] = Field(1, ge=0)
+
+    consumption: dict = {}
+    suspicion: Optional[int]
 

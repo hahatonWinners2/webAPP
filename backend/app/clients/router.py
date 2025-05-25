@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, status, Query, BackgroundTasks
 from sqlalchemy.future import select
 from datetime import date
 from sqlalchemy import desc, and_
@@ -23,7 +23,7 @@ router = APIRouter()
 
 @router.post("/clients/")
 async def create_client(
-    client_in: ClientCreate
+    client_in: ClientCreate,
 ):
     suspicion_level = get_answers(client_in.__dict__)[-1]
 
@@ -42,6 +42,10 @@ async def create_client(
         db.add(new_client)
         await db.commit()
         await db.refresh(new_client)
+
+    for c in client_in.consumption:
+        # background_tasks.add_task(add_next_month_consumption, new_client.id, consumption)
+        await add_next_month_consumption(new_client.id, c)
 
     return new_client
 
