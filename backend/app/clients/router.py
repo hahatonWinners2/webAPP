@@ -3,8 +3,9 @@ from sqlalchemy.future import select
 from datetime import date
 from sqlalchemy import desc, and_
 from typing import List, Optional
+from collections import defaultdict
 
-from schemas.client import ClientCreate, MonthlyConsumptionCreate, ClientResponse, TopClientResponse
+from schemas.client import ClientCreate, MonthlyConsumptionResponse, ClientResponse, TopClientResponse
 from storage.models.client import Client
 from storage.models.consumption import MonthlyConsumption
 from storage.models.suspicious import SuspiciousClient
@@ -70,42 +71,80 @@ async def get_clients(checked: Optional[bool] = Query(None, description="Filter 
         return clients
 
 
-@router.post("/clients/{client_id}/monthly_consumption", response_model=MonthlyConsumptionCreate)
+@router.post("/clients/{client_id}/monthly_consumption")
 async def add_next_month_consumption(
     client_id: str,
     consumption_value: float
 ):
-    
     async with async_session() as db:
+        # Fetch client
         result = await db.execute(select(Client).where(Client.id == client_id))
         client = result.scalars().first()
         if not client:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
 
+        # Fetch all consumption records for the client
         result = await db.execute(
-            select(MonthlyConsumption)
-            .where(MonthlyConsumption.client_id == client_id)
-            .order_by(MonthlyConsumption.date.desc())
-            .limit(1)
+            select(MonthlyConsumption).where(MonthlyConsumption.client_id == client_id)
         )
-        last_consumption = result.scalars().first()
+        all_consumptions = result.scalars().all()
 
-        if last_consumption:
-            new_date = next_month(last_consumption.date)
+        # Group consumptions by month number and calculate averages
+        month_consumptions = defaultdict(list)
+        for c in all_consumptions:
+            month_consumptions[c.date.month].append(c.consumption)
+
+        avg_consumptions = {
+            month: sum(values) / len(values)
+            for month, values in month_consumptions.items()
+        }
+
+        # Determine new date for the next consumption entry
+        if all_consumptions:
+            last_date = max(c.date for c in all_consumptions)
+            new_date = next_month(last_date)
         else:
             new_date = date.today().replace(day=1)
 
+        # Add new consumption record
         new_consumption = MonthlyConsumption(
             client_id=client_id,
             date=new_date,
             consumption=consumption_value
         )
-
         db.add(new_consumption)
         await db.commit()
         await db.refresh(new_consumption)
 
-    return new_consumption
+        # Update avg_consumptions with the new month consumption (overwrite or add)
+        avg_consumptions[new_date.month] = (
+            (avg_consumptions.get(new_date.month, 0) * len(month_consumptions.get(new_date.month, [])) + consumption_value)
+            / (len(month_consumptions.get(new_date.month, [])) + 1)
+        )
+
+        # Prepare data dictionary for get_answer
+        data_dict = client.__dict__
+        data_dict["consumption"] = avg_consumptions
+
+        suspicion = get_answers(data_dict)[-1]  # await if async
+
+        # Update client suspicion
+        client.suspicion = suspicion
+        db.add(client)
+        await db.commit()
+        await db.refresh(client)
+
+    return {
+        "client": {
+            "id": client.id,
+            "address": client.address,
+            "suspicion": client.suspicion,
+        },
+        "new_consumption": {
+            "date": new_consumption.date,
+            "consumption": new_consumption.consumption
+        }
+    }
 
 
 @router.get("/clients/{client_id}", response_model=ClientResponse)
@@ -123,7 +162,8 @@ async def get_monthly_consumptions(
             .where(MonthlyConsumption.client_id == client_id)
             .order_by(MonthlyConsumption.date)
         )
-        consumptions = result.scalars().all()
+        consumptions = [MonthlyConsumptionResponse(date=c.date, consumption=c.consumption) for c in result.scalars().all()]
+
     suspicious = client[1].__dict__ if client[1] else {}
     suspicious.update(client[0].__dict__)
     client = ClientResponse(**suspicious, consumptions=consumptions)

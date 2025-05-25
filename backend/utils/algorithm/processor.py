@@ -24,9 +24,11 @@ def load_data(path: str = None, json_data: dict = None) -> tuple[pd.DataFrame, p
     json_data_processed = []
 
     for i in json_data:
-        consumption = i.pop('consumption')
-        for key, value in consumption.items():
-            i[key] = value
+        consumption = {}
+        if 'consumption' in i:
+            consumption = i.pop('consumption')
+            for key, value in consumption.items():
+                i[key] = value
         i['consumption'] = list(consumption.values())
         json_data_processed.append(i)
 
