@@ -40,7 +40,7 @@ const ClientDetails = (props) => {
         }))
         setConsumption(chartData)
         setError(null)
-        setSearched(foundClient.company)
+        setSearched(null)
         setChecked(foundClient.checked)
       } else {
         setError('Клиент не найден')
