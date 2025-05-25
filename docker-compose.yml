@@ -32,6 +32,13 @@ services:
         condition: service_healthy
     networks:
       - api-network
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
 
   alembic:
     build: ./backend
@@ -44,6 +51,13 @@ services:
       - ./backend/.env
     networks:
       - api-network
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
 
   frontend:
     build: ./frontend

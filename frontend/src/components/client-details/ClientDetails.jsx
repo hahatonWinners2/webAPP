@@ -118,7 +118,12 @@ const ClientDetails = (props) => {
                 ? <button onClick={() => handleResearch(client.id)} className="btn btn-primary">Запросить проверку</button>
                 : <div className="form-group">
                     <label>Комментарий</label>
-                    <p>{isChecked == true ? client.comment : 'Запрошена проверка'}</p>
+                    <p>{isChecked == true ? (
+                      <>
+                        <p>{client.comment}</p>
+                        <button onClick={() => {}} className="btn btn-primary">Составить иск</button>
+                      </>
+                    ) : 'Запрошена проверка'}</p>
                   </div>
               }
             </div>
