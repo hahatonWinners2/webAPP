@@ -4,6 +4,7 @@ from datetime import date
 from sqlalchemy import desc, and_
 from typing import List, Optional
 from collections import defaultdict
+from copy import deepcopy
 
 from schemas.client import ClientCreate, MonthlyConsumptionResponse, ClientResponse, TopClientResponse
 from storage.models.client import Client
@@ -25,7 +26,7 @@ router = APIRouter()
 async def create_client(
     client_in: ClientCreate,
 ):
-    suspicion_level = get_answers(client_in.__dict__)[-1]
+    suspicion_level = get_answers(deepcopy(client_in.__dict__))[-1]
 
     new_client = Client(
         name=client_in.name,
@@ -42,10 +43,11 @@ async def create_client(
         db.add(new_client)
         await db.commit()
         await db.refresh(new_client)
-
-    for c in client_in.consumption:
+    i = 1
+    for month, c in client_in.consumption.items():
+        i += 1
         # background_tasks.add_task(add_next_month_consumption, new_client.id, consumption)
-        await add_next_month_consumption(new_client.id, c)
+        await add_next_month_consumption(new_client.id, c, int(month), i == len(client_in.consumption))
 
     return new_client
 
@@ -78,7 +80,9 @@ async def get_clients(checked: Optional[bool] = Query(None, description="Filter 
 @router.post("/clients/{client_id}/monthly_consumption")
 async def add_next_month_consumption(
     client_id: str,
-    consumption_value: float
+    consumption_value: float,
+    month: int | None = None,
+    get_score=True,
 ):
     async with async_session() as db:
         # Fetch client
@@ -104,7 +108,10 @@ async def add_next_month_consumption(
         }
 
         # Determine new date for the next consumption entry
-        if all_consumptions:
+        if month:
+            today = date.today()
+            new_date = date(today.year, month, 1)
+        elif all_consumptions:
             last_date = max(c.date for c in all_consumptions)
             new_date = next_month(last_date)
         else:
@@ -126,14 +133,15 @@ async def add_next_month_consumption(
             / (len(month_consumptions.get(new_date.month, [])) + 1)
         )
 
-        # Prepare data dictionary for get_answer
-        data_dict = client.__dict__
-        data_dict["consumption"] = avg_consumptions
+        if get_score:
+            # Prepare data dictionary for get_answer
+            data_dict = client.__dict__
+            data_dict["consumption"] = avg_consumptions
 
-        suspicion = get_answers(data_dict)[-1]  # await if async
+            suspicion = get_answers(data_dict)[-1]  # await if async
 
-        # Update client suspicion
-        client.suspicion = suspicion
+            # Update client suspicion
+            client.suspicion = suspicion
         db.add(client)
         await db.commit()
         await db.refresh(client)

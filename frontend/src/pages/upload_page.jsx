@@ -29,20 +29,22 @@ const UploadPage = ({ onClose, onUploadSuccess }) => {
 
             const response = await axios.post('/api/upload-json/', formData);
 
-            if (!response.ok) {
-                const errorData = await response.json();
+            if (response.status != 200) {
+                const errorData = await response.json;
                 throw new Error(errorData.detail || "Ошибка сервера");
             }
 
-            const result = await response.json();
-            onUploadSuccess(result);
+            const result = await response.json;
+            if (onUploadSuccess != undefined && onUploadSuccess != null) {
+                onUploadSuccess(result);
+            }
             onClose();
             alert("Файл успешно загружен!");
 
         } catch (error) {
             setError(error.message);
         } finally {
-            setIsLoading(false);
+            setTimeout(() => setIsLoading(false), 5000)
         }
     };
 

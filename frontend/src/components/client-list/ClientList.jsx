@@ -101,7 +101,7 @@ const ClientList = ({ onAddClick }) => {
             </button>
           </div>
           {showUPloader && (
-              <UploadPage onClose={() => setUPloader(false)} />
+              <UploadPage onClose={() => setUPloader(false)} onUploadSuccess={() => setUPloader(true)} />
           )}
         </div>
         <div className="client-list">

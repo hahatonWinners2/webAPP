@@ -66,6 +66,42 @@
   border: none;
   height: auto;
   padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.modal-actions .btn-primary {
+  background: #19b14a;
+  color: #fff;
+  border: 2px solid #19b14a;
+}
+
+.modal-actions .btn-primary:hover {
+  background: transparent;
+  color: #19b14a;
+  border: 2px solid #19b14a;
+}
+
+.modal-actions .btn-primary:active {
+  background: transparent;
+  color: #19b14a;
+  transform: scale(0.98);
+}
+
+.modal-actions .btn:not(.btn-primary) {
+  background: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+}
+
+.modal-actions .btn:not(.btn-primary):hover {
+  background: #f8f9fa;
+}
+
+.modal-actions .btn:not(.btn-primary):active {
+  background: #f1f3f5;
+  transform: scale(0.98);
 }
 
 .error {

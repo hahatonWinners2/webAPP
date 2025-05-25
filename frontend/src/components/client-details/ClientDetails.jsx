@@ -32,9 +32,10 @@ const ClientDetails = (props) => {
       if (foundClient) {
         setClient(foundClient)
         setEditedClient(foundClient)
-        const chartData = foundClient.consumptions.map(([month, value]) => ({
-          month,
-          потребление: value
+        console.log(foundClient.consumptions)
+        const chartData = foundClient.consumptions.map((consumption) => ({
+          month: consumption.date,
+          потребление: consumption.consumption
         }))
         setConsumption(chartData)
         setError(null)
