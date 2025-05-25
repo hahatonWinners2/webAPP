@@ -65,6 +65,11 @@ def get_answers(data):
 
     X = load_data(json_data=data)
 
-    preds = model.predict(X).astype(int)
+    # preds = model.predict(X).astype(int)
 
-    return preds.tolist()
+    probas = model.predict_proba(X)
+
+    proba_class_1 = probas[:, 1].round(2) * 100
+
+    return proba_class_1.astype(int).tolist()
+

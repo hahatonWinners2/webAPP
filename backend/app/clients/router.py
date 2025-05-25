@@ -11,6 +11,7 @@ from storage.models.suspicious import SuspiciousClient
 from storage.postgres import async_session
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from utils.algorithm.processor import get_answers
 
 def next_month(d: date) -> date:
     return d + relativedelta(months=1)
@@ -23,7 +24,7 @@ router = APIRouter()
 async def create_client(
     client_in: ClientCreate
 ):
-    suspicion_level = 0
+    suspicion_level = get_answers(client_in.__dict__)[-1]
 
     new_client = Client(
         name=client_in.name,
