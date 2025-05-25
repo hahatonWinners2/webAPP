@@ -1,10 +1,8 @@
 from pydantic import BaseModel, Field
 from datetime import date
 from uuid import UUID
-
-
-from pydantic import BaseModel, Field
 from typing import Optional
+
 
 class ClientCreate(BaseModel):
     name: str = Field('не знаю, кто я', max_length=100)
@@ -20,6 +18,7 @@ class TopClientResponse(BaseModel):
     address: str
     buildingType: Optional[str]
     suspicion: int
+    checked: bool | None = None
 
     class Config:
         orm_mode = True
@@ -45,6 +44,7 @@ class MonthlyConsumptionResponse(BaseModel):
         orm_mode = True
 
 class ClientResponse(BaseModel):
+    id: UUID
     name: str
     address: str
     description: Optional[str]
@@ -53,8 +53,11 @@ class ClientResponse(BaseModel):
     roomsCount: Optional[int]
     residentsCount: Optional[int]
 
-    consumptions: list[MonthlyConsumptionResponse]
+    consumptions: list[MonthlyConsumptionResponse] = []
     suspicion: int
+    company: str | None = None
+    checked: bool | None = None
+    comment: str | None = None
 
     class Config:
         orm_mode = True

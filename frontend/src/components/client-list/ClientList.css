@@ -71,7 +71,7 @@
 
 .search-input {
   flex: 1;
-  max-width: 300px;
+  max-width: 100%;
   border-radius: 15px;
   border: 2px solid var(--border-color);
   padding: 1rem 1.5rem;
@@ -219,6 +219,7 @@ tr:active {
   display: inline-block;
   text-align: center;
   min-width: 160px;
+  box-sizing: content-box;
 }
 
 .client-checkbox:hover {
@@ -227,8 +228,8 @@ tr:active {
   box-shadow: 0 2px 8px rgba(25, 177, 74, 0.2);
 }
 
-.client-checkbox:checked {
-  animation: checkbox-pop 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.client-checkbox.requested {
+  background-color: #a8a8a8;
 }
 
 @keyframes checkbox-pop {

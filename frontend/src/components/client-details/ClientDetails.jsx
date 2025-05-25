@@ -18,6 +18,7 @@ const ClientDetails = (props) => {
   const [consumption, setConsumption] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isChecked, setChecked] = useState(null)
 
   const setEditedClient = props.setEditedClient
   const setClient = props.setClient
@@ -37,12 +38,13 @@ const ClientDetails = (props) => {
         }))
         setConsumption(chartData)
         setError(null)
+        setChecked(foundClient.checked)
       } else {
         setError('Клиент не найден')
       }
       setLoading(false)
     }, 500)
-  }, [id])
+  }, [setClient, setEditedClient, id])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -51,6 +53,16 @@ const ClientDetails = (props) => {
       [name]: value
     }))
   }
+
+  const handleResearch = (client_id) => {
+    console.log(client_id)
+    setTimeout(async () => {
+      const res = await axios.post('/suspicious_clients/', {client_id: client_id})
+      setChecked(res.data?.checked)
+      return res.data?.id
+    }, 500)
+  }
+
 
   if (loading) return <div className="loading">Загрузка...</div>
   if (error) return <div className="error">{error}</div>
@@ -101,10 +113,13 @@ const ClientDetails = (props) => {
 
             <div className="info-section">
               <h2>Статус проверки</h2>
-              <div className="form-group">
-                <label>Комментарий</label>
-                <p>{client.comments}</p>
-              </div>
+              { isChecked == null
+                ? <button onClick={() => handleResearch(client.id)}>Запросить проверку</button>
+                : <div className="form-group">
+                    <label>Комментарий</label>
+                    <p>{isChecked == true ? client.comment : 'Запрошена проверка'}</p>
+                  </div>
+              }
             </div>
           </div>
 

@@ -92,10 +92,10 @@ const AddClientModal = ({ onClose }) => {
                   onChange={handleInputChange}
                   required
               >
+                <option value="Частный">Частный</option>
+                <option value="Многоквартирный">Многоквартирный</option>
+                <option value="Дача">Дача</option>
                 <option value="Прочий">Прочий</option>
-                <option value="Жилой">Жилой</option>
-                <option value="Коммерческий">Коммерческий</option>
-                {/* Добавьте другие типы по необходимости */}
               </select>
             </div>
 

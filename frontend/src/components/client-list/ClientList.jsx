@@ -9,7 +9,6 @@ const ClientList = ({ onAddClick }) => {
   const navigate = useNavigate()
   const [clients, setClients] = useState([])
   const [loading, setLoading] = useState(true)
-  // const [error, setError] = useState(null)
   const [filter, setFilter] = useState('')
   const [sortField, setSortField] = useState('address')
   const [sortDirection, setSortDirection] = useState('asc')
@@ -18,11 +17,18 @@ const ClientList = ({ onAddClick }) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      const clients = await axios.get('/clients')
+      const clients = await axios.get('/clients/')
       setClients(clients.data)
       setLoading(false)
     }, 500)
   }, [])
+
+  const handleResearch = (client_id) => {
+    setTimeout(async () => {
+      const res = await axios.post('/suspicious_clients/', {client_id: client_id})
+      return res.data?.id
+    }, 500)
+  }
 
   const handleSort = (field) => {
     if (field === sortField) {
@@ -36,7 +42,7 @@ const ClientList = ({ onAddClick }) => {
   const handleRefresh = () => {
     setLoading(true)
     setTimeout(async () => {
-      const clients = await axios.get('/clients')
+      const clients = await axios.get('/clients/')
       setClients(clients.data)
       setLoading(false)
     }, 500)
@@ -59,7 +65,6 @@ const ClientList = ({ onAddClick }) => {
       return String(aValue).localeCompare(String(bValue)) * direction
     })
 
-  // SuspicionIndicator: colored dot + percent
   const SuspicionIndicator = ({ value }) => {
     let color = 'green'
     if (value > 80) color = 'red'
@@ -73,7 +78,6 @@ const ClientList = ({ onAddClick }) => {
   }
 
   if (loading) return <div className="loading">Загрузка...</div>
-  // if (error) return <div className="error">{error}</div>
   return (
     <main className="app-main">
       <div className="client-list-page">
@@ -99,9 +103,7 @@ const ClientList = ({ onAddClick }) => {
           {showUPloader && (
               <UploadPage onClose={() => setUPloader(false)} />
           )}
-
         </div>
-
         <div className="client-list">
           <table>
             <thead>
@@ -130,12 +132,22 @@ const ClientList = ({ onAddClick }) => {
                   <td>{client.buildingType}</td>
                   <td><SuspicionIndicator value={client.suspicion} /></td>
                   <td>
-                    <button 
-                      type="button" 
-                      className="client-checkbox"
-                      onClick={e => e.stopPropagation()}>
-                      Запросить проверку
-                    </button>
+                    {
+                      client?.checked == null ?
+                      <button 
+                        type="button"
+                        className="client-checkbox"
+                        onClick={(e) => {e.stopPropagation(); handleResearch(client.id)}}>
+                        Запросить проверку
+                      </button>
+                      : 
+                      <button 
+                        type="button"
+                        className="client-checkbox requested"
+                      >
+                        Запрошена проверка
+                      </button>
+                    }
                   </td>
                 </tr>
               ))}

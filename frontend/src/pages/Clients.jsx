@@ -12,7 +12,7 @@ const ClientsPage = () => {
 
     React.useEffect(() => {
         setHeader(<Header>Аналитика потребления клиентов</Header>);
-    }, []);
+    }, [setHeader]);
 
     return (
         <>

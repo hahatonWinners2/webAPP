@@ -47,7 +47,7 @@ async def create_client(
 @router.get("/clients/", response_model=List[TopClientResponse])
 async def get_clients(checked: Optional[bool] = Query(None, description="Filter clients by suspicious checked status")):
     async with async_session() as db:
-        query = select(Client)
+        query = select(Client, SuspiciousClient.checked).join(SuspiciousClient, SuspiciousClient.client_id == Client.id, isouter=True)
 
         if checked is not None:
             subq = (
@@ -65,8 +65,7 @@ async def get_clients(checked: Optional[bool] = Query(None, description="Filter 
         query = query.order_by(desc(Client.suspicion)).limit(15)
 
         result = await db.execute(query)
-        clients = result.scalars().all()
-
+        clients = [TopClientResponse(**client[0].__dict__, checked=client[1]) for client in result.all()]
         return clients
 
 
@@ -113,20 +112,18 @@ async def get_monthly_consumptions(
     client_id: str
 ):
     async with async_session() as db:
-        # Check client exists
-        result = await db.execute(select(Client).where(Client.id == client_id))
-        client = result.scalars().first()
+        query = select(Client, SuspiciousClient).where(Client.id == client_id).join(SuspiciousClient, Client.id == SuspiciousClient.client_id, isouter=True)
+        result = await db.execute(query)
+        client = result.first()
         if not client:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-
-        # Query monthly consumptions ordered by date
         result = await db.execute(
             select(MonthlyConsumption)
             .where(MonthlyConsumption.client_id == client_id)
             .order_by(MonthlyConsumption.date)
         )
         consumptions = result.scalars().all()
-    client = client.__dict__
-    client['consumptions'] = consumptions
-
+    suspicious = client[1].__dict__ if client[1] else {}
+    suspicious.update(client[0].__dict__)
+    client = ClientResponse(**suspicious, consumptions=consumptions)
     return client
