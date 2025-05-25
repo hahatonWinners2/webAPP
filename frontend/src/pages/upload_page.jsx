@@ -25,7 +25,7 @@ const UploadPage = ({ onClose, onUploadSuccess }) => {
             const formData = new FormData();
             formData.append('file', selectedFile);
 
-            const response = await fetch('http://localhost:8000/upload-json/', {
+            const response = await fetch('http://0.0.0.0:80/api/upload-json/', {
                 method: 'POST',
                 body: formData,
             });
