@@ -12,3 +12,8 @@ pandas
 reportlab
 
 pydantic-settings
+
+BeautifulSoup4
+httpx
+transformers
+torch

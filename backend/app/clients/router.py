@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Query, BackgroundTasks
 from sqlalchemy.future import select
+from sqlalchemy.sql import exists
 from datetime import date
 from sqlalchemy import desc, and_
 from typing import List, Optional
@@ -65,10 +66,9 @@ async def get_clients(checked: Optional[bool] = Query(None, description="Filter 
                         SuspiciousClient.client_id == Client.id,
                         SuspiciousClient.checked == checked
                     )
-                )
-                .exists()
+                ).correlate(Client)
             )
-            query = query.where(subq)
+            query = query.where(exists(subq))
 
         query = query.order_by(desc(Client.suspicion)).limit(15)
 

@@ -19,6 +19,7 @@ const ClientDetails = (props) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isChecked, setChecked] = useState(null)
+  const [isSearched, setSearched] = useState(null)
 
   const setEditedClient = props.setEditedClient
   const setClient = props.setClient
@@ -39,6 +40,7 @@ const ClientDetails = (props) => {
         }))
         setConsumption(chartData)
         setError(null)
+        setSearched(foundClient.company)
         setChecked(foundClient.checked)
       } else {
         setError('Клиент не найден')
@@ -46,6 +48,41 @@ const ClientDetails = (props) => {
       setLoading(false)
     }, 500)
   }, [setClient, setEditedClient, id])
+
+  const createDocument = async (client) => {
+    let doc = ''
+    const date = new Date();
+    doc = await axios.post('/api/get_claim/', {
+      "court_name": "Краснодарский краевой суд",
+      "court_address": "Краснодарский край, г. Краснодар, ул. Красная, д. 10",
+      "istec": "ПАО \"ТНС Энерго Кубань\"",
+      "istec_inn": "2308119595",
+      "istec_ogrn": "1062309019794",
+      "istec_address": "Гимназическая ул., 55/1, Краснодар, Краснодарский край, 350000",
+      "otvetchik_name": client.name,
+      "otvetchik_address": client.address,
+      "damage_sum": "_____________",
+      "consumption_period": "\"___\" _____________ 20__ г.",
+      "activity_type": "_________________",
+      "act_date": `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`,
+      "expertise_date": `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`,
+      "tariff_calculation": "____________"
+    }, {
+      responseType: 'arraybuffer', // This ensures proper binary handling
+      headers: {
+        'Accept': 'application/pdf',
+        'Content-Type': 'application/json; charset=UTF-8' // For your request body
+      }})
+    const blob = new Blob([doc.data], { type: "application/pdf; charset=UTF-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = 'document.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -56,11 +93,28 @@ const ClientDetails = (props) => {
   }
 
   const handleResearch = (client_id) => {
-    console.log(client_id)
     setTimeout(async () => {
       const res = await axios.post('/suspicious_clients/', {client_id: client_id})
       setChecked(res.data?.checked)
       return res.data?.id
+    }, 500)
+  }
+
+  const handleSearch = (client_address) => {
+    setSearched('s')
+    setTimeout(async () => {
+      const res = await axios.get(`/api/analyze_address/?address=${client_address}`)
+      console.log(res.data)
+      const blob = new Blob([JSON.stringify(res.data)], { type: "application/json; charset=UTF-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = 'search.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setSearched(null)
     }, 500)
   }
 
@@ -114,18 +168,26 @@ const ClientDetails = (props) => {
 
             <div className="info-section">
               <h2>Статус проверки</h2>
-              { isChecked == null
-                ? <button onClick={() => handleResearch(client.id)} className="btn btn-primary">Запросить проверку</button>
-                : <div className="form-group">
-                    <label>Комментарий</label>
-                    <p>{isChecked == true ? (
-                      <>
-                        <p>{client.comment}</p>
-                        <button onClick={() => {}} className="btn btn-primary">Составить иск</button>
-                      </>
-                    ) : 'Запрошена проверка'}</p>
-                  </div>
-              }
+              <div style={{display: "inline-flex", flexDirection: "column", gap: "10px", width: "100%"}}>
+                { isChecked == null
+                  ? <button onClick={() => handleResearch(client.id)} className="btn btn-primary">Запросить проверку</button>
+                  : <div className="form-group">
+                      <label>Комментарий:</label>
+                      <>{isChecked == true ? (
+                        <>
+                          <p>{client.comment ? client.comment : <i>Бригада не оставила комментарий</i>}</p>
+                          <br />
+                          <button onClick={() => createDocument(client)} className="btn btn-primary">Составить иск</button>
+                        </>
+                      ) : <i>Запрошена проверка</i>}</>
+                    </div>
+                }
+                {
+                  isSearched == null
+                  ? <button onClick={() => handleSearch(client.address)} className="btn btn-primary">Запустить поиск</button>
+                  : <button className="btn">Запущен поиск, ожидайте...</button>
+                }
+              </div>
             </div>
           </div>
 

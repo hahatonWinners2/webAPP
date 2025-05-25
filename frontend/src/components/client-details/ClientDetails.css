@@ -46,17 +46,17 @@
 }
 
 .btn:not(.btn-primary) {
-  background: transparent;
+  background: rgb(161, 161, 161);
   color: #fff;
   border: 2px solid #fff;
 }
 
 .btn:not(.btn-primary):hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(121, 121, 121);
 }
 
 .btn:not(.btn-primary):active {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(161, 161, 161);
   transform: scale(0.98);
 }
 
