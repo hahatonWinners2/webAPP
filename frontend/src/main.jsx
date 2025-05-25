@@ -5,7 +5,7 @@ import './index.css'
 
 // Configure axios defaults
 import axios from 'axios'
-axios.defaults.baseURL = 'http://0.0.0.0:80'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
