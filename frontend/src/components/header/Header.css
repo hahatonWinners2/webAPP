@@ -13,8 +13,8 @@ header {
     letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 30px;
-    justify-content: space-between;
+    gap: 10px;
+    justify-content: left;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 

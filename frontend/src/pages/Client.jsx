@@ -28,40 +28,48 @@ const ClientPage = () => {
                 <div style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
                     gap: "10px",
+                    width: "100%"
                 }}>
-                    <button style={{
-                        fontSize: "28px",
-                        background: "none",
-                        border: "none",
-                        color: "white",
-                        cursor: "pointer",
-                        padding: "0 10px 0 5px"
-                    }} onClick={() => navigate('/clients')}>
-                        ←
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "10px",
+                    }}>
+                        <button style={{
+                            fontSize: "28px",
+                            background: "none",
+                            border: "none",
+                            color: "white",
+                            cursor: "pointer",
+                            padding: "0 10px 0 5px"
+                        }} onClick={() => navigate('/clients')}>
+                            ←
+                        </button>
+                        <span>Информация о клиенте</span>
+                    </div>
+                    {isEditing ? (
+                    <div style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "10px",
+                    }}>
+                        <button className="btn btn-primary" onClick={handleSave}>
+                        Сохранить
+                        </button>
+                        <button className="btn" onClick={handleCancel}>
+                        Отмена
+                        </button>
+                    </div>
+                    ) : (
+                    <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
+                        Редактировать
                     </button>
-                    <span>Информация о клиенте</span>
+                    )}
                 </div>
-                {isEditing ? (
-                <div style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "10px",
-                }}>
-                    <button className="btn btn-primary" onClick={handleSave}>
-                    Сохранить
-                    </button>
-                    <button className="btn" onClick={handleCancel}>
-                    Отмена
-                    </button>
-                </div>
-                ) : (
-                <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
-                    Редактировать
-                </button>
-                )}
             </Header>
         );
     }, [isEditing, client, editedClient, setHeader, navigate]);
